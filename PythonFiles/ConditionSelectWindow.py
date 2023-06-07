@@ -53,6 +53,8 @@ def condition_select_window():
     
     #Instantiate a window
     window = tk.Tk()
+    #Name the window
+    window.title("Condition Selection Window")
 
     #Instatiate Frame 1
     frame1 = tk.Frame(master=window)

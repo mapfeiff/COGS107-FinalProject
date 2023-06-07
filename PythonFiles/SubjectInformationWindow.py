@@ -37,6 +37,8 @@ def subject_information_window():
     
     #Instantiate a window
     window = tk.Tk()
+    #Name the window
+    window.title("Subject Information Window")
 
     #Instatiate Frame 1
     frame1 = tk.Frame(master=window)

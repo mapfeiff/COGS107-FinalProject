@@ -19,12 +19,14 @@ def main():
     if(subject_information_object.get_consent() == False):
         #If consent not given, then display message on window and halt experiment
         window = tk.Tk()
+        window.title("Error Window")
         greeting = tk.Label(master = window, text="Consent not given! Experiment Halted...")
         greeting.pack()
         window.mainloop()
     elif(subject_information_object.get_understanding() == False):
         #If understanding not confirmed, then display message on window and halt experiment
         window = tk.Tk()
+        window.title("Error Window")
         greeting = tk.Label(master = window, text="Understanding not confirmed! Experiment Halted...")
         greeting.pack()
         window.mainloop()

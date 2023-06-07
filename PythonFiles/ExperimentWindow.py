@@ -13,6 +13,8 @@ class Test_Selection():
 def run_test(subject_ID, test_number, condition):
     #Create an instance of a window
     window = tk.Tk()
+    #Name the window
+    window.title("Testing Window")
 
     #Instatiate Frame 1
     frame1 = tk.Frame(master=window)
