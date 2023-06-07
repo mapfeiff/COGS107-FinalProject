@@ -51,6 +51,17 @@ class Subject_Information():
     #Get the consent of the subject
     def get_consent(self):
         return(self.consent)
+    
+    #Get subject info dictionary
+    def get_all_info(self):
+        #create a dictionary with all subject information
+        subject_dict = {
+            "id" : [self.ID],
+            "age" : [self.age],
+            "sex" : [self.sex]
+        }
+        #return the created dictionary
+        return(subject_dict)
 
 
 #The subject provides information and agrees to the consent form
