@@ -26,12 +26,14 @@
 > If you have the requirements met on your system, you can directly run the ./main.py file directly instead of executing ./start-up.sh (the start-up will pip install all requirements via the "pip install -r requirements.txt" command)
 
 ## How to Run:
-> 1. Create a python virtual environment (optional, but recommended since start-up will install some libraries)
+> 1. Use "git clone" to clone this repository into a directory on your system and then change the terminal directory into the cloned directory
 >
-> 2. Execute the start-up sequence by entering "./start-up.sh" in your environment's terminal (pip installation of all requirements part of start-up process)
+> 2. Create a python virtual environment (optional, but recommended since start-up will install some libraries)
 >
-> 3. Run through the experiment (ensure that you have and enter the proper subject ID that is given to you)
+> 3. Execute the start-up sequence by entering "./start-up.sh" in your environment's terminal (pip installation of all requirements part of start-up process)
 >
-> 4. Lastly, after finishing all tests, execute the "./end-down.sh" command in your environment's terminal to anonymously save all data to github (anonymous pushing required for subject confidentiality)
+> 4. Run through the experiment (ensure that you have and enter the proper subject ID that is given to you)
 >
-> 5. Can now decide what to do with the files on your system (since all data is saved on github, you can either keep or delete them) 
+> 5. Lastly, after finishing all tests, execute the "./end-down.sh" command in your environment's terminal to anonymously save all data to github (anonymous pushing required for subject confidentiality)
+>
+> 6. Can now decide what to do with the files on your system (since all data is saved on github, you can either keep or delete them) 
