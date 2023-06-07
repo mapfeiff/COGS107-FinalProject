@@ -6,12 +6,29 @@ class Subject_Information():
     #Constructor to instantiate the ID and consent data members
     def __init__(self):
         self.ID = None
+        self.age = None
+        self.sex = None
         self.understanding = False
         self.consent = False
     
     #Set the ID for the subject
     def set_ID(self, id):
         self.ID = id
+    #set the age for the subject
+    def set_age(self, age):
+        #raise exception for wrong input
+        if(age <= 0):
+            raise(Exception(f"Error: wrong input for the age paramter! Can only be positive number but wrote {age}"))
+        self.age = age
+    #set the sex for the subject
+    def set_sex(self, sex):
+        #set the letter to be captial
+        sex = sex.upper()
+        #raise exception for wrong input
+        if(sex != "M" and sex != "F" and sex != "X"):
+            raise(Exception(f"Error: wrong input for the sex paramter! Can only be (M, F, X) but wrote {sex}"))
+        #set parameter
+        self.sex = sex
     #Set the understanding for the subject
     def set_understanding(self, understanding):
         self.understanding = understanding
@@ -22,6 +39,12 @@ class Subject_Information():
     #Get the ID of the subject
     def get_ID(self):
         return(self.ID)
+    #Get the age of the subject
+    def get_age(self):
+        return(self.age)
+    #Get the sex of the subject
+    def get_sex(self):
+        return(self.sex)
     #Get the understanding of the subject
     def get_understanding(self):
         return(self.understanding)
@@ -50,11 +73,33 @@ def subject_information_window():
 
     #Instatiate Frame 2
     frame2 = tk.Frame(master=window)
+    #Instantiate Frame 2_1
+    frame2_1 = tk.Frame(master=frame2)
     #display textbox to enter id
-    ID_entry_label = tk.Label(master=frame2, text="Enter subject ID here:")
-    ID_entry_label.pack()
-    ID_entry = tk.Entry(master=frame2)
-    ID_entry.pack()
+    ID_entry_label = tk.Label(master=frame2_1, text="Enter subject ID here:")
+    ID_entry_label.pack(side=tk.LEFT)
+    ID_entry = tk.Entry(master=frame2_1)
+    ID_entry.pack(side=tk.RIGHT)
+    #place in frame 2_1
+    frame2_1.pack()
+    #Instantiate Frame 2_2
+    frame2_2 = tk.Frame(master=frame2)
+    #display textbox to enter age
+    age_entry_label = tk.Label(master=frame2_2, text="Enter age here:")
+    age_entry_label.pack(side=tk.LEFT)
+    age_entry = tk.Entry(master=frame2_2)
+    age_entry.pack(side=tk.RIGHT)
+    #place in frame 2_2
+    frame2_2.pack()
+    #Instantiate Frame 2_3
+    frame2_3 = tk.Frame(master=frame2)
+    #display textbox to enter sex
+    sex_entry_label = tk.Label(master=frame2_3, text="Enter sex (M=male, F=female, or X=other/prefer not to say) here:")
+    sex_entry_label.pack(side=tk.LEFT)
+    sex_entry = tk.Entry(master=frame2_3)
+    sex_entry.pack(side=tk.RIGHT)
+    #place in frame 2_3
+    frame2_3.pack()
     #place in frame 2
     frame2.pack()
 
@@ -89,10 +134,14 @@ def subject_information_window():
     def submit_submission():
         #gather the data items from the window
         subject_ID = int(ID_entry.get())
+        subject_age = int(age_entry.get())
+        subject_sex = sex_entry.get()
         subject_understanding = bool(undertanding_checkbox_var.get())
         subject_consent = bool(consent_checkbox_var.get())
         #save the data inside the subject information object
         subject.set_ID(subject_ID)
+        subject.set_age(subject_age)
+        subject.set_sex(subject_sex)
         subject.set_understanding(subject_understanding)
         subject.set_consent(subject_consent)
         #close the window
