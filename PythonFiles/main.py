@@ -66,9 +66,15 @@ def main():
         condition_list = condition_order_object.get_condition_list()
         for i in range(len(condition_list)):
             #Get the results of the condition and append them to the dataframe list
-            dataframe_Tau = experiment.run_test(subject_ID=subject_information_object.get_ID(), test_number=i+1, condition=condition_list[i])
+            dataframe_Tau, dataframe_FinalBet = experiment.run_test(subject_ID=subject_information_object.get_ID(), test_number=i+1, condition=condition_list[i])
             #append dataframe into list
             df_Tau_list.append(dataframe_Tau)
+        
+        #Now order the df list based on condition
+        #
+        #
+        #
+        
         #Concatinate all the new dataframes into a single instance
         dataframe_Tau = pd.concat(df_Tau_list)
         #Write the data to the Tau model csv
