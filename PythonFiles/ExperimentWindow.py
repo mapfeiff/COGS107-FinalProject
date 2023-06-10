@@ -14,11 +14,14 @@ class Test_Selection():
         self.subject_ID = subject_ID
         self.test_condition = test_condition
         self.num_trials = num_trials
+        self.better_team = None
         self.current_trial = 1
         self.red_correct = 0
         self.red_total = 0
         self.blue_correct = 0
         self.blue_total = 0
+        self.chosen_team = None
+        self.final_bet = None
         self.test_dataframe = pd.DataFrame(dict(), columns=["person", "game", "trial", "decision", "reward", "state"])
 
     #getter function to return subject_ID
@@ -78,6 +81,28 @@ class Test_Selection():
         money_lost = 5*(self.get_red_fails() + self.get_blue_fails())
         return(money_gained - money_lost)
     
+    def set_better_team(self, better_team):
+        #Handle any errors in setting the chosen team
+        if(better_team != 0 and better_team != 1):
+            raise(Exception("Invalid team number entered for better team!"))
+        #Set the chosen team
+        self.better_team = better_team
+    def set_chosen_team(self, chosen_team):
+        #Handle any errors in setting the chosen team
+        if(chosen_team != 0 and chosen_team != 1):
+            raise(Exception("Invalid team number entered for chosen team!"))
+        #Set the chosen team
+        self.chosen_team = chosen_team
+    def set_final_bet(self, final_bet):
+        #Handle any errors in setting the final bet
+        if(final_bet < 0):
+            raise(Exception("You cannot bet a negative amount! Please enter a non-negative number"))
+        if(final_bet > max(self.get_money_earned(), 10)):
+            raise(Exception("You cannot bet more than what you earned! Please enter a number at or below yout total earnings"))
+        #Set the bet
+        self.final_bet = final_bet
+        
+
     #reward for red (left/red = 0)
     def apply_red_reward(self):
         #Get the state of the option
@@ -132,6 +157,7 @@ def run_test(subject_ID, test_number, condition):
 
     #Pseudo-Randomly determine the better team (reference team such that the other team has 1-p probabilty of winning)
     better_team = int(rand.random() + 0.5) #will result in either 0 or 1 (rounded random decimal)
+    test_data.set_better_team(better_team)
 
     #Create an instance of a window
     window = tk.Tk()
@@ -232,6 +258,66 @@ def run_test(subject_ID, test_number, condition):
             #update the window to show any new conitions added
             window.update_idletasks()
             window.update()
+            
+            #Check for end of trials
+            if(test_data.get_current_trial() > test_data.get_num_trials()):
+                #remove the center image to replace it with the final bet decision
+                graphic_disply.destroy()
+                
+                #Create a frame to place for the final bet
+                frame2_1_1 = tk.Frame(master=frame2_1)
+                #Add in the final bet option
+                final_bet_team = tk.Label(master=frame2_1_1, text="Please choose which team you think will be most likely to win:")
+                final_bet_team.pack()
+                options = ["===Choose a Team===", "Red Team", "Blue Team"]
+                selection = tk.StringVar()
+                selection.set("===Choose a Team===")
+                dropdown = tk.OptionMenu(master=frame2_1_1, variable= selection, values=options)
+                dropdown.pack()
+                if(test_data.get_money_earned() < 10):
+                    low_money_message = tk.Label(master=frame2_1_1, text=f"Note: Since you have earned less than $10, then lets assume you won $10 for the next question:")
+                    low_money_message.pack()
+                money_to_bet = test_data.get_money_earned()
+                final_bet_money = tk.Label(master=frame2_1_1, text=f"From your total earnings (${money_to_bet}), how much of it would you bet that your chosen team will win?")
+                final_bet_money.pack()
+                bet_entry = tk.Entry(master=frame2_1_1)
+                bet_entry.pack()
+                #place in the frame
+                frame2_1_1.pack()
+
+                #Instantiate Frame 3
+                frame3 = tk.Frame(master=window)
+                #define a function for what happens when the button is submitted (nested function allos us to use external variables)
+                def submit_submission():
+                    #gather the data items from the window
+                    team_select = selection.get()
+                    final_bet = int(final_bet_money.get())
+                    #Change the selected team into a number (0:red)/(1:blue)
+                    if(team_select == "===Choose a Team==="):
+                        raise(Exception("Team not selected for bet! Please choose a team..."))
+                    elif(team_select == "Red Team"):
+                        chosen_team = 0
+                    elif(team_select == "Blue Team"):
+                        chosen_team = 1
+                    #For evenly matched team, have the winning team match the chosen team (for convienience of data analysis)
+                    if(condition == 6):
+                        better_team = chosen_team
+                    #save the data inside the subject information object
+                    test_data.set_better_team(better_team)
+                    test_data.set_chosen_team(chosen_team)
+                    test_data.set_final_bet(final_bet)
+                    #close the window
+                    window.destroy()
+                #Create a submit button to close the window
+                btn_submit = tk.Button(master=frame3, text="Submit", command=submit_submission)
+                btn_submit.pack()
+                #place in frame 3
+                frame3.pack()
+                
+                #run the loop until the submit button has been pressed
+                window.mainloop()
+
+
     #exception to catch error when checking window after closing
     except:
         pass
