@@ -220,7 +220,7 @@ def run_test(subject_ID, test_number, condition):
     money_earned_label.pack(side=tk.TOP)
     #Set the central image
     global_file_path = os.path.dirname(os.path.realpath(__file__))
-    graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\Test_Screen_Layout-Draft.png")
+    graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\RedVsBlue_Pic.PNG")
     graphic = graphic.subsample(2, 2)
     graphic_disply = tk.Label(master = frame2_1, image=graphic)
     graphic_disply.pack(side=tk.BOTTOM)
