@@ -335,13 +335,13 @@ def run_test(subject_ID, test_number, condition):
 
     #Create a dataframe for the final bet
     final_bet_dict = {
-        "ID" : test_data.get_subject_ID(),
-        "Condition" : test_data.get_test_condition(),
-        "Better_Team" : test_data.get_better_team(),
-        "Total_Winnings" : test_data.get_money_earned(),
-        "Chosen_Team" : test_data.get_chosen_team(),
-        "Final_Bet" : test_data.get_final_bet(),
-        "Proportion" : test_data.get_final_bet()/test_data.get_money_earned()
+        "ID" : [test_data.get_subject_ID()],
+        "Condition" : [test_data.get_test_condition()],
+        "Better_Team" : [test_data.get_better_team()],
+        "Total_Winnings" : [test_data.get_money_earned()],
+        "Chosen_Team" : [test_data.get_chosen_team()],
+        "Final_Bet" : [test_data.get_final_bet()],
+        "Proportion" : [test_data.get_final_bet()/test_data.get_money_earned()]
     }
     final_bet_dataframe = pd.DataFrame(final_bet_dict)
     #Return the Tau and final_bet dataframes
