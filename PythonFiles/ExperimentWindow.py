@@ -285,7 +285,7 @@ def run_test(subject_ID, test_number, condition):
                     low_money_message = tk.Label(master=frame2_1_1, text=f"Note: Since you have earned less than $10, then lets assume you won $10 for the next question:")
                     low_money_message.pack()
                 money_to_bet = max(test_data.get_money_earned(), 10)
-                final_bet_money = tk.Label(master=frame2_1_1, text=f"From your total earnings (${money_to_bet}), what is the maximum amount would you bet that your chosen team will win?")
+                final_bet_money = tk.Label(master=frame2_1_1, text=f"From your total earnings (${money_to_bet}), what is the maximum amount you bet that your chosen team wins?")
                 final_bet_money.pack()
                 bet_entry = tk.Entry(master=frame2_1_1)
                 bet_entry.pack()
