@@ -6,6 +6,8 @@ import pandas as pd
 import random as rand
 #import os for getting image files from relative path on the os
 import os
+#import time to enable sleep functions
+import time
 
 #class to store the selections made by the subject
 class Test_Selection():
@@ -255,14 +257,14 @@ def run_test(subject_ID, test_number, condition):
                 red_score_label.config(text=f"Red Selection: {test_data.get_red_correct()}/{test_data.get_red_total()}")
                 blue_score_label.config(text=f"Blue Selection: {test_data.get_blue_correct()}/{test_data.get_blue_total()}")
                 money_earned_label.config(text=f"Total Earnings: ${test_data.get_money_earned()}")
-            #update the window to show any new conitions added
-            window.update_idletasks()
-            window.update()
             
             #Check for end of trials
-            if(test_data.get_current_trial() > test_data.get_num_trials()):
+            elif(test_data.get_current_trial() > test_data.get_num_trials()):
                 #remove the center image to replace it with the final bet decision
                 graphic_disply.destroy()
+                #also remove the buttons to prevent any futher trials from being added
+                red_btn.destroy()
+                blue_btn.destroy()
                 
                 #Create a frame to place for the final bet
                 frame2_1_1 = tk.Frame(master=frame2_1)
@@ -271,13 +273,13 @@ def run_test(subject_ID, test_number, condition):
                 final_bet_team.pack()
                 options = ["===Choose a Team===", "Red Team", "Blue Team"]
                 selection = tk.StringVar()
-                selection.set("===Choose a Team===")
-                dropdown = tk.OptionMenu(master=frame2_1_1, variable= selection, values=options)
+                selection.set(options[0])
+                dropdown = tk.OptionMenu(frame2_1_1, selection, *options)
                 dropdown.pack()
                 if(test_data.get_money_earned() < 10):
                     low_money_message = tk.Label(master=frame2_1_1, text=f"Note: Since you have earned less than $10, then lets assume you won $10 for the next question:")
                     low_money_message.pack()
-                money_to_bet = test_data.get_money_earned()
+                money_to_bet = max(test_data.get_money_earned(), 10)
                 final_bet_money = tk.Label(master=frame2_1_1, text=f"From your total earnings (${money_to_bet}), how much of it would you bet that your chosen team will win?")
                 final_bet_money.pack()
                 bet_entry = tk.Entry(master=frame2_1_1)
@@ -291,7 +293,7 @@ def run_test(subject_ID, test_number, condition):
                 def submit_submission():
                     #gather the data items from the window
                     team_select = selection.get()
-                    final_bet = int(final_bet_money.get())
+                    final_bet = int(bet_entry.get())
                     #Change the selected team into a number (0:red)/(1:blue)
                     if(team_select == "===Choose a Team==="):
                         raise(Exception("Team not selected for bet! Please choose a team..."))
@@ -301,9 +303,10 @@ def run_test(subject_ID, test_number, condition):
                         chosen_team = 1
                     #For evenly matched team, have the winning team match the chosen team (for convienience of data analysis)
                     if(condition == 6):
-                        better_team = chosen_team
+                        test_data.set_better_team(chosen_team)
+                    else:
+                        test_data.set_better_team(better_team)
                     #save the data inside the subject information object
-                    test_data.set_better_team(better_team)
                     test_data.set_chosen_team(chosen_team)
                     test_data.set_final_bet(final_bet)
                     #close the window
@@ -317,9 +320,14 @@ def run_test(subject_ID, test_number, condition):
                 #run the loop until the submit button has been pressed
                 window.mainloop()
 
+            #update the window to show any new conitions added
+            window.update_idletasks()
+            window.update()
+
 
     #exception to catch error when checking window after closing
     except:
         pass
 
-    #Create two dataframes: the test data and the last question to return
+    #Create two dataframes: the test data and the final bet to return
+    #final bet header = ["ID", "Condition", "Better_Team", "Total_Winnings", "Chosen_Team", "Final_Bet", "Proportion"]
