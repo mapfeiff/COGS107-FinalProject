@@ -6,8 +6,6 @@ import pandas as pd
 import random as rand
 #import os for getting image files from relative path on the os
 import os
-#import time to enable sleep functions
-import time
 
 #class to store the selections made by the subject
 class Test_Selection():
@@ -82,6 +80,18 @@ class Test_Selection():
         money_gained = 20*(self.get_red_correct() + self.get_blue_correct())
         money_lost = 5*(self.get_red_fails() + self.get_blue_fails())
         return(money_gained - money_lost)
+    #get the better team
+    def get_better_team(self):
+        return(self.better_team)
+    #get the chosen team
+    def get_chosen_team(self):
+        return(self.chosen_team)
+    #get the final bet
+    def get_final_bet(self):
+        return(self.final_bet)
+    #Get the test_dataframe
+    def get_test_dataframe(self):
+        return(self.test_dataframe)
     
     def set_better_team(self, better_team):
         #Handle any errors in setting the chosen team
@@ -104,7 +114,6 @@ class Test_Selection():
         #Set the bet
         self.final_bet = final_bet
         
-
     #reward for red (left/red = 0)
     def apply_red_reward(self):
         #Get the state of the option
@@ -113,7 +122,8 @@ class Test_Selection():
         self.red_correct += 1
         self.red_total += 1
         #Add selection to the dataframe
-        data_row = [self.subject_ID, self.test_condition, self.current_trial, 0, 1, state]
+        game = 1
+        data_row = [self.subject_ID, game, self.current_trial, 0, 1, state]
         self.test_dataframe.loc[len(self.test_dataframe)] = data_row
         #increment trial number
         self.current_trial += 1
@@ -125,7 +135,8 @@ class Test_Selection():
         self.blue_correct += 1
         self.blue_total += 1
         #Add selection to the dataframe
-        data_row = [self.subject_ID, self.test_condition, self.current_trial, 1, 1, state]
+        game = 1
+        data_row = [self.subject_ID, game, self.current_trial, 1, 1, state]
         self.test_dataframe.loc[len(self.test_dataframe)] = data_row
         #increment trial number
         self.current_trial += 1
@@ -136,7 +147,8 @@ class Test_Selection():
         #add to increment based on selection condition
         self.red_total += 1
         #Add selection to the dataframe
-        data_row = [self.subject_ID, self.test_condition, self.current_trial, 0, 0, state]
+        game = 1
+        data_row = [self.subject_ID, game, self.current_trial, 0, 0, state]
         self.test_dataframe.loc[len(self.test_dataframe)] = data_row
         #increment trial number
         self.current_trial += 1
@@ -147,7 +159,8 @@ class Test_Selection():
         #add to increment based on selection condition
         self.blue_total += 1
         #Add selection to the dataframe
-        data_row = [self.subject_ID, self.test_condition, self.current_trial, 1, 0, state]
+        game = 1
+        data_row = [self.subject_ID, game, self.current_trial, 1, 0, state]
         self.test_dataframe.loc[len(self.test_dataframe)] = data_row
         #increment trial number
         self.current_trial += 1
@@ -205,20 +218,12 @@ def run_test(subject_ID, test_number, condition):
     blue_score_label.pack(side=tk.RIGHT)
     money_earned_label = tk.Label(master = frame2_1, text=f"Total Earnings: ${test_data.get_money_earned()}")
     money_earned_label.pack(side=tk.TOP)
-    
-
-
-
+    #Set the central image
     global_file_path = os.path.dirname(os.path.realpath(__file__))
     graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\Test_Screen_Layout-Draft.png")
     graphic = graphic.subsample(2, 2)
     graphic_disply = tk.Label(master = frame2_1, image=graphic)
     graphic_disply.pack(side=tk.BOTTOM)
-
-
-
-
-
     #place in frame 2_1
     frame2_1.pack(side=tk.LEFT)
     #Define function for what happens to the right(blue) button when it is pressed
@@ -324,10 +329,20 @@ def run_test(subject_ID, test_number, condition):
             window.update_idletasks()
             window.update()
 
-
     #exception to catch error when checking window after closing
     except:
         pass
 
-    #Create two dataframes: the test data and the final bet to return
-    #final bet header = ["ID", "Condition", "Better_Team", "Total_Winnings", "Chosen_Team", "Final_Bet", "Proportion"]
+    #Create a dataframe for the final bet
+    final_bet_dict = {
+        "ID" : test_data.get_subject_ID(),
+        "Condition" : test_data.get_test_condition(),
+        "Better_Team" : test_data.get_better_team(),
+        "Total_Winnings" : test_data.get_money_earned(),
+        "Chosen_Team" : test_data.get_chosen_team(),
+        "Final_Bet" : test_data.get_final_bet(),
+        "Proportion" : test_data.get_final_bet()/test_data.get_money_earned()
+    }
+    final_bet_dataframe = pd.DataFrame(final_bet_dict)
+    #Return the Tau and final_bet dataframes
+    return(test_data.get_test_dataframe(), final_bet_dataframe)
