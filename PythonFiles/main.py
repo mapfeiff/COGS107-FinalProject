@@ -7,6 +7,19 @@ import tkinter as tk
 #Import pandas for data organization
 import pandas as pd
 
+#function to get the dataframe from a file (or create a new one if the file doesnt exist)
+def append_dataframe_to_csv(filename:str, dataframe):
+    #First open the files with all the previously gathered data
+    try:
+        old_dataframe = pd.read_csv(filename, header=0)
+    #If file does not exist, raise exception
+    except:
+        raise(Exception("File \"{filename}\" does not exist"))
+    #Concatinate all the new dataframes into a single instance
+    dataframe_Tau = pd.concat([old_dataframe, dataframe])
+    #Write the data to the Tau model csv
+    dataframe_Tau.to_csv(filename, index=False)
+
 #Main function to run experiment
 def main():
     #Get the condition ordering
@@ -49,55 +62,61 @@ def main():
         else:
             #The subject is natural (human), data will go into the human specific csv
             csv_filename = "human"
-
-        #First open the file with all the previously gathered data
-        try:
-            dataframe_Tau = pd.read_csv(f"../{csv_filename}_test_data_Tau.csv", header=0)
-        #If the file does not exist, create a new data file
-        except:
-            header_Tau = ["person", "game", "trial", "decision", "reward", "state"]
-            dataframe_Tau = pd.DataFrame(dict(), columns=header_Tau)
         
-        #Create a list of dataframes to add additional trials to
-        df_Tau_list = list()
-        #append the previos data to the list
-        df_Tau_list.append(dataframe_Tau)
         #Loop through each condition
         condition_list = condition_order_object.get_condition_list()
         for i in range(len(condition_list)):
             #Get the results of the condition and append them to the dataframe list
             dataframe_Tau, dataframe_FinalBet = experiment.run_test(subject_ID=subject_information_object.get_ID(), test_number=i+1, condition=condition_list[i])
-            #append dataframe into list
-            df_Tau_list.append(dataframe_Tau)
-        
-        #Now order the df list based on condition
-        #
-        #
-        #
-        
-        #Concatinate all the new dataframes into a single instance
-        dataframe_Tau = pd.concat(df_Tau_list)
-        #Write the data to the Tau model csv
-        dataframe_Tau.to_csv(f"../{csv_filename}_test_data_Tau.csv", index=False)
-        #Lastly, drop the "state" column and add the data to the Win-Stay;Lose-Shift (WSLS) model csv
-        dataframe_WSLS = dataframe_Tau.drop(columns=["state"])
-        dataframe_WSLS.to_csv(f"../{csv_filename}_test_data_WSLS.csv", index=False)
+            
+            #Append the tau data to the csv
+            filename = f"../{csv_filename}_test_data_Tau_c{condition_list[i]}.csv"
+            try:
+                append_dataframe_to_csv(filename, dataframe_Tau)
+            except:
+                #If csv file does not exist, then create a new csv with only a header to add to
+                header_Tau = ["person", "game", "trial", "decision", "reward", "state"]
+                new_dataframe = pd.DataFrame(dict(), columns=header_Tau)
+                new_dataframe.to_csv(filename, index=False)
+                append_dataframe_to_csv(filename, dataframe_Tau)
+            
+            #Append the WSLS data to the csv
+            filename = f"../{csv_filename}_test_data_WSLS_c{condition_list[i]}.csv"
+            try:
+                #WSLS data is simply the Tau data without the "state" column
+                dataframe_WSLS = dataframe_Tau.drop("state", axis="columns")
+                append_dataframe_to_csv(filename, dataframe_WSLS)
+            except:
+                #If csv file does not exist, then create a new csv with only a header to add to
+                header_WSLS = ["person", "game", "trial", "decision", "reward"]
+                new_dataframe = pd.DataFrame(dict(), columns=header_WSLS)
+                new_dataframe.to_csv(filename, index=False)
+                append_dataframe_to_csv(filename, dataframe_WSLS)
+            
+            #Append the final bet data to the csv
+            filename = f"../{csv_filename}_test_data_FinalBet.csv"
+            try:
+                append_dataframe_to_csv(filename, dataframe_Tau)
+            except:
+                #If csv file does not exist, then create a new csv with only a header to add to
+                header_FinalBet = ["ID", "Condition", "Winnings", "Final_Bet", "Proportion"]
+                new_dataframe = pd.DataFrame(dict(), columns=header_FinalBet)
+                new_dataframe.to_csv(filename, index=False)
+                append_dataframe_to_csv(filename, dataframe_FinalBet)
 
         #At this point, the subject data has been saved, so save the subject information as well
-        #First open the file with all the previously gathered data
-        try:
-            dataframe_subject = pd.read_csv(f"../{csv_filename}_subject_info.csv", header=0)
-        #If the file does not exist, create a new data file
-        except:
-            header_subject = ["id", "age", "sex"]
-            dataframe_subject = pd.DataFrame(dict(), columns=header_subject)
-        #Then create a dataframe of the new subject information
+        filename = f"../{csv_filename}_subject_info.csv"
+        #Gether the dataframe describing all relevent information about the subject
         dataframe_new_subject = pd.DataFrame(subject_information_object.get_all_info())
-        #Next, concatinate all the new dataframes to the old one
-        df_subject_list = [dataframe_subject, dataframe_new_subject]
-        dataframe_Tau = pd.concat(df_subject_list)
-        #Lastly, write the dataframe into the csv
-        dataframe_Tau.to_csv(f"../{csv_filename}_subject_info.csv", index=False)
+        #Append the subject dataframe to the csv
+        try:
+            append_dataframe_to_csv(filename, dataframe_new_subject)
+        except:
+            #If csv file does not exist, then create a new csv with only a header to add to
+            header_subject = ["id", "age", "sex"]
+            new_dataframe = pd.DataFrame(dict(), columns=header_subject)
+            new_dataframe.to_csv(filename, index=False)
+            append_dataframe_to_csv(filename, dataframe_new_subject)
 
 
 #Run the main program when executed as the main file
