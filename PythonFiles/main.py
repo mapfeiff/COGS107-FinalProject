@@ -101,7 +101,7 @@ def main():
             #Append the final bet data to the csv
             filename = f"{global_file_path}/../{csv_filename}_test_data_FinalBet.csv"
             try:
-                append_dataframe_to_csv(filename, dataframe_Tau)
+                append_dataframe_to_csv(filename, dataframe_FinalBet)
             except:
                 #If csv file does not exist, then create a new csv with only a header to add to
                 header_FinalBet = ["ID", "Condition", "Better_Team", "Total_Winnings", "Chosen_Team", "Final_Bet", "Proportion"]
