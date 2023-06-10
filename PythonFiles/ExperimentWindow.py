@@ -212,9 +212,9 @@ def run_test(subject_ID, test_number, condition):
     #Define all central information for the test
     trial_label = tk.Label(master = frame2_1, text=f"Trial: {test_data.get_current_trial()}/{test_data.get_num_trials()}")
     trial_label.pack(side=tk.TOP)
-    red_score_label = tk.Label(master = frame2_1, text=f"Red Selection: {test_data.get_red_correct()}/{test_data.get_red_total()}")
+    red_score_label = tk.Label(master = frame2_1, text=f"Red Selection: {test_data.get_red_correct()}/{test_data.get_red_total()}", background="#e85a5a")
     red_score_label.pack(side=tk.LEFT)
-    blue_score_label = tk.Label(master = frame2_1, text=f"Blue Selection: {test_data.get_blue_correct()}/{test_data.get_blue_total()}")
+    blue_score_label = tk.Label(master = frame2_1, text=f"Blue Selection: {test_data.get_blue_correct()}/{test_data.get_blue_total()}", background="#5469d6")
     blue_score_label.pack(side=tk.RIGHT)
     money_earned_label = tk.Label(master = frame2_1, text=f"Total Earnings: ${test_data.get_money_earned()}")
     money_earned_label.pack(side=tk.TOP)
