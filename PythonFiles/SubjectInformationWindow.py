@@ -133,14 +133,14 @@ def subject_information_window():
     experiment_information_label3.pack()
     experiment_information_label4 = tk.Label(master=frame3, text="Lastly, after the 15 choices are made, you are to use your knowledge to make one last bet with as much money as you want (of the total earned).")
     experiment_information_label4.pack()
-    experiment_information_label5 = tk.Label(master=frame3, text="Your participation and consent to participate in this experiment be revoked at anytime you want; however, all information collected will be anonymous, having no way to link back to your name.")
+    experiment_information_label5 = tk.Label(master=frame3, text="Your consent to participate in this experiment can be revoked at anytime you want; however, all information collected will be anonymous, having no way to link back to your name.")
     experiment_information_label5.pack()
     #Set the central image
     global_file_path = os.path.dirname(os.path.realpath(__file__))
     graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\RedVsBlue_Pic.PNG")
     graphic = graphic.subsample(3, 3)
-    graphic_disply = tk.Label(master = frame2_1, image=graphic)
-    graphic_disply.pack(side=tk.BOTTOM)
+    graphic_disply = tk.Label(master = frame3, image=graphic)
+    graphic_disply.pack()
 
     bottom_space_label = tk.Label(master=frame3, text="")
     bottom_space_label.pack()
