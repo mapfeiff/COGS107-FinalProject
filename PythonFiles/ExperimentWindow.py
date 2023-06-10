@@ -4,6 +4,8 @@ import tkinter as tk
 import pandas as pd
 #Import random for random number generator
 import random as rand
+#import os for getting image files from relative path on the os
+import os
 
 #class to store the selections made by the subject
 class Test_Selection():
@@ -72,7 +74,7 @@ class Test_Selection():
             return(5)
     #get to total money earned thus far
     def get_money_earned(self):
-        money_gained = 10*(self.get_red_correct() + self.get_blue_correct())
+        money_gained = 20*(self.get_red_correct() + self.get_blue_correct())
         money_lost = 5*(self.get_red_fails() + self.get_blue_fails())
         return(money_gained - money_lost)
     
@@ -128,9 +130,6 @@ def run_test(subject_ID, test_number, condition):
     #Instantiate a test selection object
     test_data = Test_Selection(subject_ID, condition)
 
-    #Start off with 0 dollars
-    money_earned = 0
-
     #Pseudo-Randomly determine the better team (reference team such that the other team has 1-p probabilty of winning)
     better_team = int(rand.random() + 0.5) #will result in either 0 or 1 (rounded random decimal)
 
@@ -165,7 +164,7 @@ def run_test(subject_ID, test_number, condition):
         else:
             test_data.apply_red_punishment()
     #Display button for left side (red team)
-    red_btn = tk.Button(master=frame2, text="Select the Red Team", command=red_btn_selected)
+    red_btn = tk.Button(master=frame2, text="Select the Red Team", background="#e85a5a", command=red_btn_selected)
     red_btn.pack(side=tk.LEFT)
     #Instantiate frame 2_1
     frame2_1 = tk.Frame(master=frame2)
@@ -178,9 +177,20 @@ def run_test(subject_ID, test_number, condition):
     blue_score_label.pack(side=tk.RIGHT)
     money_earned_label = tk.Label(master = frame2_1, text=f"Total Earnings: ${test_data.get_money_earned()}")
     money_earned_label.pack(side=tk.TOP)
-    ############graphic = tk.PhotoImage(file="..\Images\Test_Screen_Layout-Draft.JPG")
-    ############graphic_disply = tk.Label(master = frame2_1, image=graphic)
-    ############graphic_disply.pack(side=tk.BOTTOM)
+    
+
+
+
+    global_file_path = os.path.dirname(os.path.realpath(__file__))
+    graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\Test_Screen_Layout-Draft.png")
+    graphic = graphic.subsample(2, 2)
+    graphic_disply = tk.Label(master = frame2_1, image=graphic)
+    graphic_disply.pack(side=tk.BOTTOM)
+
+
+
+
+
     #place in frame 2_1
     frame2_1.pack(side=tk.LEFT)
     #Define function for what happens to the right(blue) button when it is pressed
@@ -199,7 +209,7 @@ def run_test(subject_ID, test_number, condition):
         else:
             test_data.apply_blue_punishment()
     #Display button for left side (red team)
-    blue_btn = tk.Button(master=frame2, text="Select the Blue Team", command=blue_btn_selected)
+    blue_btn = tk.Button(master=frame2, text="Select the Blue Team", background="#5469d6", command=blue_btn_selected)
     blue_btn.pack(side=tk.LEFT)
     #place in frame 2
     frame2.pack()
