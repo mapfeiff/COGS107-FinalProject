@@ -75,7 +75,7 @@ def main():
             global_file_path = os.path.dirname(os.path.realpath(__file__))
             
             #Append the tau data to the csv
-            filename = f"{global_file_path}/../{csv_filename}_test_data_Tau_c{condition_list[i]}.csv"
+            filename = f"{global_file_path}/../Data/Tau_Switch/{csv_filename}_test_data_Tau_c{condition_list[i]}.csv"
             try:
                 append_dataframe_to_csv(filename, dataframe_Tau)
             except:
@@ -86,7 +86,7 @@ def main():
                 append_dataframe_to_csv(filename, dataframe_Tau)
             
             #Append the WSLS data to the csv
-            filename = f"{global_file_path}/../{csv_filename}_test_data_WSLS_c{condition_list[i]}.csv"
+            filename = f"{global_file_path}/../Data/WSLS/{csv_filename}_test_data_WSLS_c{condition_list[i]}.csv"
             try:
                 #WSLS data is simply the Tau data without the "state" column
                 dataframe_WSLS = dataframe_Tau.drop("state", axis="columns")
@@ -99,7 +99,7 @@ def main():
                 append_dataframe_to_csv(filename, dataframe_WSLS)
             
             #Append the final bet data to the csv
-            filename = f"{global_file_path}/../{csv_filename}_test_data_FinalBet.csv"
+            filename = f"{global_file_path}/../Data/Final_Bet/{csv_filename}_test_data_FinalBet.csv"
             try:
                 append_dataframe_to_csv(filename, dataframe_FinalBet)
             except:
@@ -110,7 +110,7 @@ def main():
                 append_dataframe_to_csv(filename, dataframe_FinalBet)
 
         #At this point, the subject data has been saved, so save the subject information as well
-        filename = f"{global_file_path}/../{csv_filename}_subject_info.csv"
+        filename = f"{global_file_path}/../Data/{csv_filename}_subject_info.csv"
         #Gether the dataframe describing all relevent information about the subject
         dataframe_new_subject = pd.DataFrame(subject_information_object.get_all_info())
         #Append the subject dataframe to the csv
