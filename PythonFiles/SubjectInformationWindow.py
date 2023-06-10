@@ -1,5 +1,7 @@
 #Import tkinter for python GUI
 import tkinter as tk
+#import os for getting image files from relative path on the os
+import os
 
 #class to gather subject information
 class Subject_Information():
@@ -119,8 +121,27 @@ def subject_information_window():
     #display the experiment information to the subject
     top_space_label = tk.Label(master=frame3, text="")
     top_space_label.pack()
-    experiment_information_label = tk.Label(master=frame3, text="Test informatio here pls")
-    experiment_information_label.pack()
+
+    #Test information
+    experiment_information_label0 = tk.Label(master=frame3, text="For this test, you will have 15 choices between 2 teams (red team and blue team).")
+    experiment_information_label0.pack()
+    experiment_information_label1 = tk.Label(master=frame3, text="Each team will have a certain probability of winning; the probabilites will change for each 15-choice test period, but the probabilities will remain the same for entirity of that given test.")
+    experiment_information_label1.pack()
+    experiment_information_label2 = tk.Label(master=frame3, text="Your choice will represent a bet toward that team which you will either win(+$20) or lose(-$5).")
+    experiment_information_label2.pack()
+    experiment_information_label3 = tk.Label(master=frame3, text="Your goal is to make as much money a possible before your 15 bets are up.")
+    experiment_information_label3.pack()
+    experiment_information_label4 = tk.Label(master=frame3, text="Lastly, after the 15 choices are made, you are to use your knowledge to make one last bet with as much money as you want (of the total earned).")
+    experiment_information_label4.pack()
+    experiment_information_label5 = tk.Label(master=frame3, text="Your participation and consent to participate in this experiment be revoked at anytime you want; however, all information collected will be anonymous, having no way to link back to your name.")
+    experiment_information_label5.pack()
+    #Set the central image
+    global_file_path = os.path.dirname(os.path.realpath(__file__))
+    graphic = tk.PhotoImage(file=f"{global_file_path}\..\Images\RedVsBlue_Pic.PNG")
+    graphic = graphic.subsample(3, 3)
+    graphic_disply = tk.Label(master = frame2_1, image=graphic)
+    graphic_disply.pack(side=tk.BOTTOM)
+
     bottom_space_label = tk.Label(master=frame3, text="")
     bottom_space_label.pack()
     #place in frame 3
