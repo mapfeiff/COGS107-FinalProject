@@ -99,7 +99,7 @@ def main():
                 append_dataframe_to_csv(filename, dataframe_Tau)
             except:
                 #If csv file does not exist, then create a new csv with only a header to add to
-                header_FinalBet = ["ID", "Condition", "Winnings", "Final_Bet", "Proportion"]
+                header_FinalBet = ["ID", "Condition", "Better_Team", "Total_Winnings", "Chosen_Team", "Final_Bet", "Proportion"]
                 new_dataframe = pd.DataFrame(dict(), columns=header_FinalBet)
                 new_dataframe.to_csv(filename, index=False)
                 append_dataframe_to_csv(filename, dataframe_FinalBet)
