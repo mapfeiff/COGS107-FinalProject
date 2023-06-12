@@ -2,8 +2,8 @@
 git config user.name "Anonymous"
 git config user.email "anon@user.com"
 
-#Add the confirm the changes that were made to the csv file
-git add --all
+#Add the changes that were made to the csv files only
+git add Data/*
 
 #Commit the changes, saving the data under an anonymous user
 git commit -m "Test Complete; Data Uploaded"
